@@ -1,0 +1,79 @@
+
+import hashlib
+import os
+
+
+def get_file_path():
+    return input("Enter file path: ").strip()
+
+
+def calculate_hash(file_path):
+    sha256 = hashlib.sha256()
+
+    try:
+        with open(file_path, "rb") as file:
+            while True:
+                data = file.read(4096)
+
+                if not data:
+                    break
+
+                sha256.update(data)
+
+        return sha256.hexdigest()
+
+    except OSError:
+        return None
+
+
+def save_hash(file_path, file_hash):
+    with open("file_hash.txt", "w") as file:
+        file.write(file_hash)
+
+
+def load_hash():
+    try:
+        with open("file_hash.txt", "r") as file:
+            return file.read().strip()
+    except FileNotFoundError:
+        return None
+
+
+def monitor_file(file_path):
+    current_hash = calculate_hash(file_path)
+
+    if current_hash is None:
+        print("[!] Unable to read file.")
+        return
+
+    original_hash = load_hash()
+
+    if original_hash is None:
+        save_hash(file_path, current_hash)
+        print("[+] Original file hash saved.")
+        print("[+] File is now being monitored.")
+
+    elif current_hash == original_hash:
+        print("[OK] File integrity verified.")
+        print("[OK] No changes detected.")
+
+    else:
+        print("[WARNING] File has been modified!")
+        print("[!] Integrity check failed.")
+
+
+def main():
+    print("File Integrity Monitor")
+    print("-" * 35)
+
+    file_path = get_file_path()
+
+    if not os.path.isfile(file_path):
+        print("[!] File not found.")
+        return
+
+    monitor_file(file_path)
+
+
+if __name__ == "__main__":
+    main()
