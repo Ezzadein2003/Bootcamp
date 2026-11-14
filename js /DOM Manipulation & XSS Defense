@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DOM Manipulation & XSS Defense</title>
+</head>
+<body>
+
+    <h2>Comment System</h2>
+
+    <input type="text" id="commentInput"
+           placeholder="Enter your comment">
+
+    <button onclick="addComment()">Add Comment</button>
+
+    <h3>Comments:</h3>
+    <ul id="commentList"></ul>
+
+    <script>
+        function addComment() {
+
+            // Get user input
+            let input = document.getElementById("commentInput");
+            let comment = input.value.trim();
+
+            // Validate input
+            if (comment === "") {
+                alert("Please enter a comment!");
+                return;
+            }
+
+            // Create a new DOM element
+            let li = document.createElement("li");
+
+            // Safely insert user input as text
+            li.textContent = comment;
+
+            // Add element to the page
+            document.getElementById("commentList")
+                    .appendChild(li);
+
+            // Clear input field
+            input.value = "";
+        }
+    </script>
+
+</body>
+</html>
