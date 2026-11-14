@@ -1,0 +1,8 @@
+2026-11-15 08:00:00 INFO Application started
+2026-11-15 08:01:00 INFO User logged in
+2026-11-15 08:02:00 WARNING High memory usage
+2026-11-15 08:03:00 ERROR Database connection failed
+2026-11-15 08:04:00 INFO Request processed
+2026-11-15 08:05:00 ERROR File not found
+2026-11-15 08:06:00 WARNING Slow response time
+2026-11-15 08:07:00 INFO Application running
