@@ -1,0 +1,80 @@
+
+from collections import Counter
+
+
+def get_log_file():
+    return input("Enter log file path: ").strip()
+
+
+def analyze_logs(file_path):
+    log_counts = Counter()
+    errors = []
+
+    try:
+        with open(file_path, "r", encoding="utf-8") as file:
+
+            for line in file:
+                line = line.strip()
+
+                if not line:
+                    continue
+
+                if "INFO" in line:
+                    log_counts["INFO"] += 1
+
+                elif "WARNING" in line:
+                    log_counts["WARNING"] += 1
+
+                elif "ERROR" in line:
+                    log_counts["ERROR"] += 1
+                    errors.append(line)
+
+                else:
+                    log_counts["OTHER"] += 1
+
+        return log_counts, errors
+
+    except FileNotFoundError:
+        print("[!] Log file not found.")
+        return None, None
+
+    except OSError as error:
+        print(f"[!] Error reading file: {error}")
+        return None, None
+
+
+def print_summary(log_counts, errors):
+    total_logs = sum(log_counts.values())
+
+    print("\nLog Analysis Results")
+    print("-" * 35)
+
+    print(f"Total Logs   : {total_logs}")
+    print(f"INFO         : {log_counts['INFO']}")
+    print(f"WARNING      : {log_counts['WARNING']}")
+    print(f"ERROR        : {log_counts['ERROR']}")
+    print(f"OTHER        : {log_counts['OTHER']}")
+
+    print("\nError Messages:")
+    print("-" * 35)
+
+    if errors:
+        for error in errors:
+            print(error)
+    else:
+        print("No errors found.")
+
+    print("-" * 35)
+
+
+def main():
+    file_path = get_log_file()
+
+    log_counts, errors = analyze_logs(file_path)
+
+    if log_counts is not None:
+        print_summary(log_counts, errors)
+
+
+if __name__ == "__main__":
+    main()
